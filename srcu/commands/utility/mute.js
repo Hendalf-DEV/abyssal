@@ -12,7 +12,7 @@ module.exports = {
             option.setName('time')
             .setDescription('Время на которое Вы хотите выдать мут (В минутах)')
             .setRequired(true)),
-            category: 'user',
+            
             async execute(interaction) {
         if (interaction.member.permissions.has(PermissionsBitField.Flags.KickMembers)) {
 

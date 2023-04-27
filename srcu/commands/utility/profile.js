@@ -46,7 +46,7 @@ module.exports = {
         .setDescription('Укажите пользователя (Опцианально)')
         .setRequired(false)
     ),
-    category: 'user',
+    
     
   async execute(interaction) {
     if (interaction.options.getUser('user') !== null) {

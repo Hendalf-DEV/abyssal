@@ -11,7 +11,7 @@ module.exports = {
         .addStringOption(option =>
             option.setName('reason')
             .setDescription('Введите причину бана (Не обязательно)')),
-            category: 'user',
+            
             async execute(interaction) {
         if (interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) {
             const reason = interaction.options.getString('reason') ?? 'Не указана';

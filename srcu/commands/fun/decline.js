@@ -5,7 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('decline')
         .setDescription('Отклонить предложение о браке'),
-        category: 'user',
+        
     async execute(interaction) {
         const proposal = proposals.get(interaction.user.id);
 

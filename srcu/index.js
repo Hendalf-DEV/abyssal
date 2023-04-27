@@ -31,7 +31,6 @@ for (const folder of commandFolders) {
       if ('data' in command && 'execute' in command) {
         commands.push({
           ...command.data.toJSON(),
-          category: command.category
         });
       } else {
         console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
@@ -42,12 +41,7 @@ for (const folder of commandFolders) {
     
 }
 
-const commandNamesAndCategories = commands.map(command => ({
-  name: command.name,
-  category: command.category
-}));
-
-module.exports = { client, commandNamesAndCategories };
+module.exports = client;
 
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));

@@ -5,7 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('unmarry')
         .setDescription('Развод'),
-        category: 'user',
+        
     async execute(interaction) {
         db.get(`SELECT * FROM married WHERE userId1=? OR userId2=?`, [interaction.user.id, interaction.user.id], async (error, row) => {
             if (!row) {

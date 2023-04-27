@@ -25,7 +25,7 @@ module.exports = {
         .addStringOption(option => option.setName('xp')
         .setDescription('XP')
         .setRequired(true)),
-        category: 'user',
+        
     async execute(interaction) {
         if (interaction.member.permissions.has(PermissionsBitField.Flags.KickMembers)) {
         const { getUserRank } = require('../fun/rank.js')

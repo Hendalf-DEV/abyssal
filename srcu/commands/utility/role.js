@@ -6,7 +6,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('createrolemessage')
         .setDescription('Создает сообщение с кнопками для добавления ролей.'),
-        category: 'user',
+        
     async execute(interaction) {
         if (interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) {
 

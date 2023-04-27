@@ -10,7 +10,7 @@ module.exports = {
         .setName('marry')
         .setDescription('Запрос на брак')
         .addUserOption(option => option.setName('user').setDescription('Пользователь, которого вы хотите предложить на брак').setRequired(true)),
-        category: 'user',
+        
     async execute(interaction) {
         const user = interaction.options.getUser('user');
 

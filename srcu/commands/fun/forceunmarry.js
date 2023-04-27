@@ -6,7 +6,7 @@ module.exports = {
         .setName('forceunmarry')
         .setDescription('Вынужденный брак')
         .addUserOption(option => option.setName('user').setDescription('Первый пользователь в браке').setRequired(true)),
-        category: 'user',
+        
     async execute(interaction) {
         if (interaction.member.permissions.has(PermissionsBitField.Flags.KickMembers)) {
             db.get(`SELECT * FROM married WHERE userId1=? OR userId2=?`, [interaction.options.getUser('user').id, interaction.options.getUser('user').id], async (error, row) => {

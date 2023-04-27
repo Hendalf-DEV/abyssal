@@ -19,7 +19,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Показывает задержу бота'),
-        category: 'user',
     async execute(interaction) {
         await interaction.deferReply();
         const width = 555;

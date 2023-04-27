@@ -7,7 +7,7 @@ module.exports = {
         .setDescription('Вынужденный брак')
         .addUserOption(option => option.setName('user1').setDescription('Первый пользователь в браке').setRequired(true))
         .addUserOption(option => option.setName('user2').setDescription('Второй пользователь в браке').setRequired(true)),
-        category: 'user',
+        
     async execute(interaction) {
         if (interaction.member.permissions.has(PermissionsBitField.Flags.KickMembers)) {
         const user1 = interaction.options.getUser('user1');

@@ -55,7 +55,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('settings')
     .setDescription('Ваш профиль'),
-    category: 'user',
+    
     
   async execute(interaction) {
     const user = interaction.user

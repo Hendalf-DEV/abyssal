@@ -34,7 +34,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('rank')
         .setDescription('Показывает ваш ранг'),
-        category: 'user',
+        
     async execute(interaction) {
         const userRank = await getUserRank(interaction.user.id);
 

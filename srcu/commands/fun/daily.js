@@ -26,7 +26,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('daily')
     .setDescription('Получить ежедневный бонус'),
-    category: 'user',
+    
   async execute(interaction) {
     async function daily(userId, stingNow) {
         return new Promise((resolve, reject) => {

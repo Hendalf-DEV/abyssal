@@ -143,7 +143,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('shop')
         .setDescription('Открывает магазин ролей'),
-        category: 'user',
+        
     async execute(interaction) {
 
             const Shop = new EmbedBuilder()
