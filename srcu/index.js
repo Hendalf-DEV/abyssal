@@ -5,14 +5,13 @@ const path = require('node:path');
 require('dotenv').config();
 const TOKEN = process.env['TOKEN'];
 const GUILD = process.env['GUILD'];
-const GPT = process.env['GPT_API_KEY'];
 const db = require('./database');
 
 const privateCreate = require("./events/privateCreate");
 
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildVoiceStates]});
-
+module.exports = client;
 const commands = [];
 
 client.commands = new Collection();
@@ -41,7 +40,7 @@ for (const folder of commandFolders) {
     
 }
 
-module.exports = client;
+
 
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
@@ -112,47 +111,65 @@ function addMemberIfNotExists(tableName, userId) {
     });
   }
 
-const tables = ['ranking', 'voiceTime', 'users'];
+const tables = ['voiceTime'];
 
 function addRanking(userId) {
-    const query = `SELECT * FROM ranking WHERE userId = ?`;
-    db.get(query, [userId], (err, row) => {
+  const query = `SELECT * FROM ranking WHERE userId = ?`;
+  db.get(query, [userId], (err, row) => {
       if (err) {
-        console.error(err.message);
+          console.error(err.message);
       }
-  
-      // If the users xp and level are null, add them
-      if (row.xp === null || row.level === null) {
-        const updateQuery = `UPDATE ranking SET xp = 0, level = 1 WHERE userId = ?`;
-        db.run(updateQuery, [userId], (err) => {
-            if (err) {
-              console.error(err.message);
-            }
-            console.log(`Set user xp and level for ${userId} to default values in ranking`);
-          });
-      }
-    });
-  }
 
-  function addBalance(userId) {
-    const query = `SELECT * FROM users WHERE userId = ?`;
-    db.get(query, [userId], (err, row) => {
-      if (err) {
-        console.error(err.message);
-      }
-  
-      // If the users xp and level are null, add them
-      if (row.balance === null) {
-        const updateQuery = `UPDATE users SET balance = 0 WHERE userId = ?`;
-        db.run(updateQuery, [userId], (err) => {
-            if (err) {
-              console.error(err.message);
-            }
-            console.log(`Set user balance for ${userId} to default values in users`);
+      // Check if row is defined before accessing its properties
+      if (row && (row.xp === null || row.level === null)) {
+          const updateQuery = `UPDATE ranking SET xp = 0, level = 1 WHERE userId = ?`;
+          db.run(updateQuery, [userId], (err) => {
+              if (err) {
+                  console.error(err.message);
+              }
+              console.log(`Set user xp and level for ${userId} to default values in ranking`);
+          });
+      } else if (!row) { // If row is not defined, insert a new row with default values
+          const insertQuery = `INSERT INTO ranking (userId, xp, level) VALUES (?, 0, 1)`;
+          db.run(insertQuery, [userId], (err) => {
+              if (err) {
+                  console.error(err.message);
+              }
+              console.log(`Added user ${userId} to ranking with default values`);
           });
       }
-    });
-  }
+  });
+}
+
+
+function addBalance(userId) {
+  const query = `SELECT * FROM users WHERE userId = ?`;
+  db.get(query, [userId], (err, row) => {
+      if (err) {
+          console.error(err.message);
+      }
+
+      // Check if row is defined before accessing its properties
+      if (row && row.balance === null) {
+          const updateQuery = `UPDATE users SET balance = 0 WHERE userId = ?`;
+          db.run(updateQuery, [userId], (err) => {
+              if (err) {
+                  console.error(err.message);
+              }
+              console.log(`Set user balance for ${userId} to default values in users`);
+          });
+      } else if (!row) { // If row is not defined, insert a new row with default values
+          const insertQuery = `INSERT INTO users (userId, balance) VALUES (?, 0)`;
+          db.run(insertQuery, [userId], (err) => {
+              if (err) {
+                  console.error(err.message);
+              }
+              console.log(`Added user ${userId} to users with default values`);
+          });
+      }
+  });
+}
+
 
 client.once(Events.ClientReady, () => {
     console.log('Бот запущен');
@@ -220,31 +237,5 @@ function updateDatabase(userId) {
 client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
     await handleVoiceStateUpdate(oldState, newState);
 });
-
-
-
-client.on("messageCreate", async (message) => {
-    const { ChatGPT } = await import('discord-chat-gpt');
-    const chatGpt = new ChatGPT({
-        apiKey: GPT, // get from https://beta.openai.com/account/api-keys
-    });
-    if (!message.guild || message.author.bot) return;
-    let ChatBotChannelId = "1099437710332149910";
-    let channel = message.guild.channels.cache.get(ChatBotChannelId);
-    if (!channel) return;
-    if (message.channel.id === channel.id) {
-        let chatreply = await chatGpt.chat(message.content, 'user').catch((e) => {
-            console.log(e);
-        });
-        if (chatreply.length > 2000) {
-            chatreply = chatreply.substring(0, 2000);
-        }
-        message.reply({
-            content: `${chatreply}`,
-        });
-    }
-});
-  
-
 
 client.login(TOKEN);
