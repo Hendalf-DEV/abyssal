@@ -20,7 +20,6 @@ module.exports = {
         .setName('ping')
         .setDescription('Показывает задержу бота'),
     async execute(interaction) {
-        await interaction.deferReply();
         const width = 555;
         const height = 205;
         const canvas = Canvas.createCanvas(600, 215);
@@ -62,6 +61,6 @@ module.exports = {
 
         const buffer = canvas.toBuffer();
         const attachment = new AttachmentBuilder(buffer, { name: 'image.jpg' });
-        await interaction.followUp({ files: [attachment] });
+        await interaction.reply({ files: [attachment] });
     },
 };
